@@ -55,6 +55,19 @@ class _HomePagesState extends State<HomePages> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+
+                Text(
+                  'Available Rooms',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // Dynamically render available rooms
+                for (var freeRoom in freeRooms)
+                  ..._buildFreeRoomWidgets(freeRoom),
+                SizedBox(height: 50),  // Add space between sections
+
                 Text(
                   'Occupied Rooms',
                   style: TextStyle(
@@ -66,16 +79,7 @@ class _HomePagesState extends State<HomePages> {
                 for (var schedule in schedules)
                   ..._buildRoomScheduleWidgets(schedule),
                 SizedBox(height: 20),  // Add space between sections
-                Text(
-                  'Available Rooms',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                // Dynamically render available rooms
-                for (var freeRoom in freeRooms)
-                  ..._buildFreeRoomWidgets(freeRoom),
+
               ],
             ),
           ),
