@@ -111,3 +111,28 @@ const filterSchedule = (classRoom, events) => {
         schedule: filteredSchedule
     };
 };
+
+api.addReservation = (req, res) => {
+    const { roomNumber, startTime, endTime, startDate, endDate } = req.body;
+    const events = getEvents(roomNumber);
+
+    const eventKey = `${roomNumber}-${startTime}-${endTime}-${startDate}-${endDate}`;
+    console.log(`Checking event: ${eventKey}`);
+
+    for (event of events) {
+        const eventKeyy = `${event.roomNumber}-${event.startTime}-${event.endTime}-${event.startDate}-${event.endDate}`;
+        console.log(`Checking event inside: ${eventKeyy}`);
+        if (eventKey === eventKeyy) {
+            res.status(400).send('Time slot already reserved');
+        } else {
+            res.status(200).send('Time slot reserved');
+        }
+    }
+};
+
+api.getEvents = (req, res) => {
+    const eventPath = path.resolve(__dirname, '../../events.json');
+    const events = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
+
+    res.json(events);
+};

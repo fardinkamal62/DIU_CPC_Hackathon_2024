@@ -3,6 +3,18 @@
     "startTime": "10:00",
     "endTime": "11:30",
     "reason": "Cancelled",
-    "roomNumber": 705
+    "roomNumber": 705,
+    "type": "class",
+    "startDate": "2021-09-01",
+    "endDate": "2021-09-01"
+  },
+  {
+    "type": "exam",
+    "roomNumber": 705,
+    "startTime": "10:00",
+    "endTime": "11:30",
+    "reason": "",
+    "startDate": "2021-09-01",
+    "endDate": "2021-09-10"
   }
 ]

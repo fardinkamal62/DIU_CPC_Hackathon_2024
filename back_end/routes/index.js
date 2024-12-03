@@ -17,4 +17,14 @@ router.post('/api/event', function(req, res, next) {
   res.json(event);
 });
 
+router.get('/api/events', function(req, res, next) {
+  const event = api.getEvents(req, res);
+  res.json(event);
+});
+
+router.post('/api/reservation', function(req, res, next) {
+  const event = api.addReservation(req, res);
+  res.json(event);
+});
+
 module.exports = router;
