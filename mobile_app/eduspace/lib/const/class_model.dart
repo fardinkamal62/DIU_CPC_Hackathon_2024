@@ -1,4 +1,3 @@
-// class_model.dart
 class ClassModel {
   final String className;
   final String time;
@@ -11,4 +10,14 @@ class ClassModel {
     required this.day,
     required this.classroom,
   });
+
+  // Convert JSON to ClassModel
+  factory ClassModel.fromJson(Map<String, dynamic> json) {
+    return ClassModel(
+      className: json['className'] as String,
+      time: json['time'] as String,
+      day: json['day'] as String,
+      classroom: json['classroom'] as String,
+    );
+  }
 }

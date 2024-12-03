@@ -1,4 +1,5 @@
 import 'package:eduspace/const/color.dart';
+import 'package:eduspace/screen/booking_page.dart';
 import 'package:flutter/material.dart';
 
 class AvailableWidget extends StatelessWidget {
@@ -41,7 +42,7 @@ class AvailableWidget extends StatelessWidget {
                 available
                     ? ElevatedButton(
                   onPressed: () {
-                    // Add your booking logic here
+                    showEmailPopup(context);
                   },
                   child: Icon(Icons.calendar_today, color: Colors.white),
                   style: ElevatedButton.styleFrom(
