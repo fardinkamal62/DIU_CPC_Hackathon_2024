@@ -73,14 +73,10 @@ const getEvents = (roomNumber) => {
  * @returns {*} A new class room object with the events filtered out
  */
 const filterSchedule = (classRoom, events) => {
-    console.log(`Filtering schedule for room ${classRoom.roomNumber}`);
-    console.log(`Events: ${JSON.stringify(events)}`);
     // Create a Set for faster lookups
     const eventSet = new Set(events.map(event => 
         `${event.roomNumber}-${event.startTime}-${event.endTime}`
     ));
-
-    console.log(`Event Set: ${JSON.stringify([...eventSet])}`);
 
     const filteredSchedule = classRoom.schedule.map(day => {
         // Check if `times` exists and is an array
@@ -91,10 +87,8 @@ const filterSchedule = (classRoom, events) => {
 
         const filteredTimes = day.times.filter(time => {
             const eventKey = `${classRoom.roomNumber}-${time.startTime}-${time.endTime}`;
-            console.log(`Checking for event: ${eventKey}`);
             // Exclude the time slot if it's in the eventSet
             if (eventSet.has(eventKey)) {
-                console.log(`Time slot removed: ${eventKey}`);
                 return false;
             }
             return true;
@@ -113,11 +107,10 @@ const filterSchedule = (classRoom, events) => {
 };
 
 api.addReservation = (req, res) => {
-    const { roomNumber, startTime, endTime, startDate, endDate } = req.body;
+    const { roomNumber, startTime, endTime, startDate, endDate, title } = req.body;
     const events = getEvents(roomNumber);
 
     const eventKey = `${roomNumber}-${startTime}-${endTime}-${startDate}-${endDate}`;
-    console.log(`Checking event: ${eventKey}`);
 
     let conflict = false;
 
