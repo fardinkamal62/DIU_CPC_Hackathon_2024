@@ -119,14 +119,26 @@ api.addReservation = (req, res) => {
     const eventKey = `${roomNumber}-${startTime}-${endTime}-${startDate}-${endDate}`;
     console.log(`Checking event: ${eventKey}`);
 
-    for (event of events) {
+    let conflict = false;
+
+    for (const event of events) {
         const eventKeyy = `${event.roomNumber}-${event.startTime}-${event.endTime}-${event.startDate}-${event.endDate}`;
         console.log(`Checking event inside: ${eventKeyy}`);
         if (eventKey === eventKeyy) {
-            res.status(400).send('Time slot already reserved');
-        } else {
-            res.status(200).send('Time slot reserved');
+            conflict = true;
+            break;
         }
+    }
+
+    if (conflict) {
+        res.status(400).send('Time slot already reserved');
+    } else {
+        // Add the new reservation to the events
+        const newEvent = { roomNumber, startTime, endTime, startDate, endDate };
+        events.push(newEvent);
+        const eventPath = path.resolve(__dirname, '../../events.json');
+        fs.writeFileSync(eventPath, JSON.stringify(events, null, 2));
+        res.status(200).send('Time slot reserved');
     }
 };
 
