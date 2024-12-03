@@ -12,17 +12,30 @@ class HomePages extends StatefulWidget {
 
 class _HomePagesState extends State<HomePages> {
   List<Map<String, dynamic>> schedules = [];
+  List<Map<String, dynamic>> freeRooms = [];
 
+  // Fetch data for both schedules and free rooms
   Future<void> fetchData() async {
-    final response = await http.get(Uri.parse('http://10.0.2.2:3000/api/schedules'));
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
+    // Fetch occupied room schedule data
+    final scheduleResponse = await http.get(Uri.parse('http://10.0.2.2:3000/api/schedules'));
+    if (scheduleResponse.statusCode == 200) {
+      final List<dynamic> scheduleData = jsonDecode(scheduleResponse.body);
       setState(() {
-        schedules = data.map((item) => Map<String, dynamic>.from(item)).toList();
+        schedules = scheduleData.map((item) => Map<String, dynamic>.from(item)).toList();
       });
-      print(schedules);  // Debugging: Print the fetched data
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Failed to load occupied rooms');
+    }
+
+    // Fetch available room data
+    final freeRoomResponse = await http.get(Uri.parse('http://10.0.2.2:3000/api/free-rooms'));
+    if (freeRoomResponse.statusCode == 200) {
+      final List<dynamic> freeRoomData = jsonDecode(freeRoomResponse.body);
+      setState(() {
+        freeRooms = freeRoomData.map((item) => Map<String, dynamic>.from(item)).toList();
+      });
+    } else {
+      throw Exception('Failed to load available rooms');
     }
   }
 
@@ -52,6 +65,17 @@ class _HomePagesState extends State<HomePages> {
                 // Dynamically render available rooms and schedules
                 for (var schedule in schedules)
                   ..._buildRoomScheduleWidgets(schedule),
+                SizedBox(height: 20),  // Add space between sections
+                Text(
+                  'Available Rooms',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // Dynamically render available rooms
+                for (var freeRoom in freeRooms)
+                  ..._buildFreeRoomWidgets(freeRoom),
               ],
             ),
           ),
@@ -98,6 +122,45 @@ class _HomePagesState extends State<HomePages> {
         );
       }
     }
+    return widgets;
+  }
+
+  // Function to build the widget for available rooms
+  List<Widget> _buildFreeRoomWidgets(Map<String, dynamic> freeRoom) {
+    List<Widget> widgets = [];
+    final roomNumber = freeRoom['roomNumber'];
+    final startTime = freeRoom['startTime'];
+    final endTime = freeRoom['endTime'];
+
+    // Add available room information
+    widgets.add(
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Text(
+          'Room: $roomNumber (Available)',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+
+    // Add time slot for the available room
+    widgets.add(
+      AvailableWidget(
+        title: '$roomNumber (Available)',
+        roomNo: '$roomNumber',
+        time: '$startTime - $endTime',
+      ),
+    );
+    // Add reason for the room being available (e.g., cancelled class)
+    widgets.add(
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+      ),
+    );
+
     return widgets;
   }
 }

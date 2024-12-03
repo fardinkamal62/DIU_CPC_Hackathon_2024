@@ -1,31 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../../const/class_model.dart';
 
 class SearchRoomsPages extends StatefulWidget {
   @override
-  _ClassListPageState createState() => _ClassListPageState();
+  _SearchRoomsPagesState createState() => _SearchRoomsPagesState();
 }
 
-class _ClassListPageState extends State<SearchRoomsPages> {
-  List<ClassModel> classes = [];
+class _SearchRoomsPagesState extends State<SearchRoomsPages> {
+  List<Map<String, dynamic>> freeRooms = [];
   String selectedTime = '';
   String selectedDay = '';
   String selectedClassroom = '';
 
-  // Fetch data from API
+  // Fetch data from the free rooms API endpoint
   Future<void> fetchData() async {
-    final response = await http.get(Uri.parse('http://10.0.2.2:3000/api/schedules'));
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
+    final freeRoomsResponse = await http.get(Uri.parse('http://10.0.2.2:3000/api/free-rooms'));
+    if (freeRoomsResponse.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(freeRoomsResponse.body);
       setState(() {
-        // Convert the fetched data to ClassModel list
-        classes = data.map((item) => ClassModel.fromJson(item)).toList();
+        freeRooms = data.map((item) => Map<String, dynamic>.from(item)).toList();
       });
-      print(classes);  // Debugging: Print the fetched data
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Failed to load free rooms data');
     }
   }
 
@@ -35,16 +32,16 @@ class _ClassListPageState extends State<SearchRoomsPages> {
     fetchData();
   }
 
-  // Dropdown filter items
-  List<String> get times => classes.map((c) => c.time).toSet().toList();
-  List<String> get days => classes.map((c) => c.day).toSet().toList();
-  List<String> get classrooms => classes.map((c) => c.classroom).toSet().toList();
+  // Predefined dropdown filter items
+  List<String> get times => ['8:00 - 9:00', '9:00 - 10:00', '10:00 - 11:00', '11:00 - 12:00', '12:00 - 13:00', '13:00 - 14:00', '14:00 - 15:00', '15:00 - 16:00', '16:00 - 17:00', '17:00 - 18:00', '18:00 - 19:00', '19:00 - 20:00', '20:00 - 21:00', '21:00 - 22:00', '22:00 - 23:00', '23:00 - 24:00'];
+  List<String> get days => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  List<String> get classrooms => ['501', '502', '503', '504', '505', '601', '602', '603', '604', '605', '701', '702', '703', '704', '705', '801', '802', '803', '804', '805', '901', '902', '903', '904', '905'];
 
-  List<ClassModel> get filteredClasses {
-    return classes.where((classModel) {
-      return (selectedTime.isEmpty || classModel.time == selectedTime) &&
-          (selectedDay.isEmpty || classModel.day == selectedDay) &&
-          (selectedClassroom.isEmpty || classModel.classroom == selectedClassroom);
+  List<Map<String, dynamic>> get filteredRooms {
+    return freeRooms.where((room) {
+      return (selectedTime.isEmpty || room['startTime'] == selectedTime) &&
+          (selectedDay.isEmpty || room['startDate'] == selectedDay) &&
+          (selectedClassroom.isEmpty || room['roomNumber'].toString() == selectedClassroom);
     }).toList();
   }
 
@@ -106,15 +103,15 @@ class _ClassListPageState extends State<SearchRoomsPages> {
                 }).toList(),
               ),
               SizedBox(height: 20),
-              // Display the filtered classes
+              // Display the filtered rooms
               Expanded(
                 child: ListView.builder(
-                  itemCount: filteredClasses.length,
+                  itemCount: filteredRooms.length,
                   itemBuilder: (context, index) {
-                    final classModel = filteredClasses[index];
+                    final room = filteredRooms[index];
                     return ListTile(
-                      title: Text(classModel.className),
-                      subtitle: Text('${classModel.time} - ${classModel.day} - ${classModel.classroom}'),
+                      title: Text('Room ${room['roomNumber']}'),
+                      subtitle: Text('${room['startTime']} - ${room['endTime']} - ${room['reason']}'),
                     );
                   },
                 ),
