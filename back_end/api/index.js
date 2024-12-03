@@ -73,14 +73,10 @@ const getEvents = (roomNumber) => {
  * @returns {*} A new class room object with the events filtered out
  */
 const filterSchedule = (classRoom, events) => {
-    console.log(`Filtering schedule for room ${classRoom.roomNumber}`);
-    console.log(`Events: ${JSON.stringify(events)}`);
     // Create a Set for faster lookups
     const eventSet = new Set(events.map(event => 
         `${event.roomNumber}-${event.startTime}-${event.endTime}`
     ));
-
-    console.log(`Event Set: ${JSON.stringify([...eventSet])}`);
 
     const filteredSchedule = classRoom.schedule.map(day => {
         // Check if `times` exists and is an array
@@ -91,10 +87,8 @@ const filterSchedule = (classRoom, events) => {
 
         const filteredTimes = day.times.filter(time => {
             const eventKey = `${classRoom.roomNumber}-${time.startTime}-${time.endTime}`;
-            console.log(`Checking for event: ${eventKey}`);
             // Exclude the time slot if it's in the eventSet
             if (eventSet.has(eventKey)) {
-                console.log(`Time slot removed: ${eventKey}`);
                 return false;
             }
             return true;
@@ -113,20 +107,31 @@ const filterSchedule = (classRoom, events) => {
 };
 
 api.addReservation = (req, res) => {
-    const { roomNumber, startTime, endTime, startDate, endDate } = req.body;
+    const { roomNumber, startTime, endTime, startDate, endDate, title } = req.body;
     const events = getEvents(roomNumber);
 
     const eventKey = `${roomNumber}-${startTime}-${endTime}-${startDate}-${endDate}`;
-    console.log(`Checking event: ${eventKey}`);
 
-    for (event of events) {
+    let conflict = false;
+
+    for (const event of events) {
         const eventKeyy = `${event.roomNumber}-${event.startTime}-${event.endTime}-${event.startDate}-${event.endDate}`;
         console.log(`Checking event inside: ${eventKeyy}`);
         if (eventKey === eventKeyy) {
-            res.status(400).send('Time slot already reserved');
-        } else {
-            res.status(200).send('Time slot reserved');
+            conflict = true;
+            break;
         }
+    }
+
+    if (conflict) {
+        res.status(400).send('Time slot already reserved');
+    } else {
+        // Add the new reservation to the events
+        const newEvent = { roomNumber, startTime, endTime, startDate, endDate };
+        events.push(newEvent);
+        const eventPath = path.resolve(__dirname, '../../events.json');
+        fs.writeFileSync(eventPath, JSON.stringify(events, null, 2));
+        res.status(200).send('Time slot reserved');
     }
 };
 
