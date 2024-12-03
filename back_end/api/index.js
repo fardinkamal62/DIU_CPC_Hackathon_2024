@@ -136,3 +136,19 @@ api.getEvents = (req, res) => {
 
     res.json(events);
 };
+
+api.getFreeRooms = (req, res) => {
+    const eventPath = path.resolve(__dirname, '../../events.json');
+    const events = JSON.parse(fs.readFileSync(eventPath, 'utf8'));
+
+    const freeRooms = [];
+    const classRooms = events.map(room => {
+        const type = room.type;
+
+        if (type === 'class') {
+            freeRooms.push(room);
+        }
+    });
+
+    res.json(freeRooms);
+};

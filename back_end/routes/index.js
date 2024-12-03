@@ -27,4 +27,8 @@ router.post('/api/reservation', function(req, res, next) {
   res.json(event);
 });
 
+router.get('/api/free-rooms', function(req, res, next) {
+  const event = api.getFreeRooms(req, res);
+});
+
 module.exports = router;
