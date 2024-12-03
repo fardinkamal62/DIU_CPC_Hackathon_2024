@@ -2,3 +2,5 @@
 
 back_end/node_modules
 mobile_app/.idea
+
+back_end/.env

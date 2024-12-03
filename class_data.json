@@ -1,0 +1,128 @@
+[
+    {
+        "type": "class",
+        "roomNumber": 705,
+        "schedule": [
+            {
+                "day": "Monday",
+                "times": [
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:30"
+                    },
+                    {
+                        "startTime": "11:30",
+                        "endTime": "13:00"
+                    }
+                ]
+            },
+            {
+                "day": "Tuesday",
+                "times": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:30"
+                    },
+                    {
+                        "startTime": "10:30",
+                        "endTime": "12:00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "roomNumber": 706,
+        "schedule": [
+            {
+                "day": "Monday",
+                "times": [
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:30"
+                    },
+                    {
+                        "startTime": "11:30",
+                        "endTime": "13:00"
+                    }
+                ]
+            },
+            {
+                "day": "Tuesday",
+                "times": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:30"
+                    },
+                    {
+                        "startTime": "10:30",
+                        "endTime": "12:00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "roomNumber": 707,
+        "schedule": [
+            {
+                "day": "Monday",
+                "times": [
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:30"
+                    },
+                    {
+                        "startTime": "11:30",
+                        "endTime": "13:00"
+                    }
+                ]
+            },
+            {
+                "day": "Tuesday",
+                "times": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:30"
+                    },
+                    {
+                        "startTime": "10:30",
+                        "endTime": "12:00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "type": "exam",
+        "roomNumber": 705,
+        "schedule": [
+            {
+                "day": "Monday",
+                "times": [
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:30"
+                    },
+                    {
+                        "startTime": "11:30",
+                        "endTime": "13:00"
+                    }
+                ]
+            },
+            {
+                "day": "Tuesday",
+                "times": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:30"
+                    },
+                    {
+                        "startTime": "10:30",
+                        "endTime": "12:00"
+                    }
+                ]
+            }
+        ]
+    }
+]
