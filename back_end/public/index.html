@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Class Rooms</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> 
+</head>
+<body>
+
+    <h1>Free Class Rooms</h1>
+    <ul id="class-rooms"></ul>
+
+    <h1>Reserve Room</h1>
+    <form action="http://127.0.0.1:3000/api/reservation" method="POST">
+        <input type="text" name="name" placeholder="Name">
+        <input type="text" name="roomNumber" placeholder="Room Number">
+        <input type="text" name="startTime" placeholder="Start Time">
+        <input type="text" name="endTime" placeholder="End Time">
+        <button type="submit">Reserve</button>
+
+    <script>
+        $(document).ready(function() {
+            $.get('http://127.0.0.1:3000/api/free-rooms', function(data) {
+                console.log(data);
+                data.forEach(function(classRoom) {
+                    $('#class-rooms').append('<li>' + classRoom.roomNumber + ' Time: ' + classRoom.startTime + ' - ' + classRoom.endTime + '</li>');
+                });
+            });
+
+            $.get('http://localhost:3000/api/bookings', function(data) {
+                console.log(data);
+                data.forEach(function(booking) {
+                    $('#bookings').append('<li>' + booking.name + '</li>');
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>
