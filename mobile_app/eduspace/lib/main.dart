@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Comfortaa',
       ),
+      debugShowCheckedModeBanner: false,
       home: DashboardScreen(),
     );
   }

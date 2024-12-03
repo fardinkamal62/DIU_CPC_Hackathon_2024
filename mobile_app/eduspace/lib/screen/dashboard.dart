@@ -1,6 +1,9 @@
 import 'package:eduspace/const/color.dart';
 import 'package:eduspace/screen/future_pages/home_pages.dart';
+import 'package:eduspace/screen/future_pages/reserve_room_page.dart';
 import 'package:flutter/material.dart';
+
+import 'future_pages/search_rooms_pages.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -13,16 +16,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    HomePages(),
-    Text(
-      'Index 1: Available Rooms',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Reserve Room',
-      style: optionStyle,
-    ),
+  static List<Widget> _widgetOptions = <Widget>[
+    const HomePages(),
+    SearchRoomsPages(),
+    ReserveRoomPage(),
   ];
 
   void _onItemTapped(int index) {

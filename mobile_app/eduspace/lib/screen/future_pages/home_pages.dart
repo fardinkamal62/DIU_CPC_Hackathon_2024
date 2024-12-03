@@ -15,12 +15,30 @@ class _HomePagesState extends State<HomePages> {
       body:SafeArea(
         child: Padding(
             padding:EdgeInsets.all(16),
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                AvailableWidget(),
-              ],
-            ),
+          child: SingleChildScrollView(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Available Rooms',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  AvailableWidget( title: 'Available Rooms', roomNo: '101', time: '10:00 AM - 12:00 PM'),
+                  SizedBox(height: 36),
+                  Text(
+                    'Available Rooms',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  AvailableWidget( title: 'Unavailable Rooms', roomNo: '102', time: '12:00 PM - 02:00 PM'),
+                ],
+              ),
+          ),
         ),
       )
     );
