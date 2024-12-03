@@ -1,5 +1,6 @@
-// class_list_page.dart
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../../const/class_model.dart';
 
 class SearchRoomsPages extends StatefulWidget {
@@ -8,17 +9,33 @@ class SearchRoomsPages extends StatefulWidget {
 }
 
 class _ClassListPageState extends State<SearchRoomsPages> {
-  final List<ClassModel> classes = [
-    ClassModel(className: 'Math', time: '10:00 AM', day: 'Monday', classroom: '101'),
-    ClassModel(className: 'Science', time: '12:00 PM', day: 'Monday', classroom: '102'),
-    ClassModel(className: 'History', time: '10:00 AM', day: 'Tuesday', classroom: '101'),
-    // Add more classes as needed
-  ];
-
+  List<ClassModel> classes = [];
   String selectedTime = '';
   String selectedDay = '';
   String selectedClassroom = '';
 
+  // Fetch data from API
+  Future<void> fetchData() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:3000/api/schedules'));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        // Convert the fetched data to ClassModel list
+        classes = data.map((item) => ClassModel.fromJson(item)).toList();
+      });
+      print(classes);  // Debugging: Print the fetched data
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  // Dropdown filter items
   List<String> get times => classes.map((c) => c.time).toSet().toList();
   List<String> get days => classes.map((c) => c.day).toSet().toList();
   List<String> get classrooms => classes.map((c) => c.classroom).toSet().toList();
@@ -40,6 +57,7 @@ class _ClassListPageState extends State<SearchRoomsPages> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Time Dropdown
               DropdownButton<String>(
                 hint: Text('Select Time'),
                 value: selectedTime.isEmpty ? null : selectedTime,
@@ -55,6 +73,7 @@ class _ClassListPageState extends State<SearchRoomsPages> {
                   );
                 }).toList(),
               ),
+              // Day Dropdown
               DropdownButton<String>(
                 hint: Text('Select Day'),
                 value: selectedDay.isEmpty ? null : selectedDay,
@@ -70,6 +89,7 @@ class _ClassListPageState extends State<SearchRoomsPages> {
                   );
                 }).toList(),
               ),
+              // Classroom Dropdown
               DropdownButton<String>(
                 hint: Text('Select Classroom'),
                 value: selectedClassroom.isEmpty ? null : selectedClassroom,
@@ -86,6 +106,7 @@ class _ClassListPageState extends State<SearchRoomsPages> {
                 }).toList(),
               ),
               SizedBox(height: 20),
+              // Display the filtered classes
               Expanded(
                 child: ListView.builder(
                   itemCount: filteredClasses.length,
