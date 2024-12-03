@@ -39,7 +39,7 @@ class _ReserveRoomPageState extends State<ReserveRoomPage> {
       };
 
       final response = await http.post(
-        Uri.parse('http://127.0.0.1:3000/api/reservation'),
+        Uri.parse('http://10.0.2.2:3000/api/reservation'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(reservationData),
       );
